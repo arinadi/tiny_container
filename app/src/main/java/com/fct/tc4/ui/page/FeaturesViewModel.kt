@@ -43,6 +43,14 @@ data class AudioFeature(
     val enabled: Boolean
 ) : FeatureItem()
 
+data class PrintFeature(
+    override val index: Int,
+    override val type: String,
+    override val name: String,
+    override val description: String,
+    val enabled: Boolean
+) : FeatureItem()
+
 data class MicrophoneFeature(
     override val index: Int,
     override val type: String,
@@ -245,6 +253,8 @@ class FeaturesViewModel(application: Application) : AndroidViewModel(application
         val description = map["description"] as? String ?: ""
         return when (type) {
             "audio" -> AudioFeature(index, type, name, description,
+                enabled = map["enabled"] as? Boolean ?: false)
+            "print" -> PrintFeature(index, type, name, description,
                 enabled = map["enabled"] as? Boolean ?: false)
             "microphone" -> MicrophoneFeature(index, type, name, description,
                 enabled = micEnabled)

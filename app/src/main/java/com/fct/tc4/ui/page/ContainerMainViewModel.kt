@@ -28,6 +28,7 @@ import androidx.lifecycle.viewModelScope
 import com.fct.tc4.TinyAudio
 import com.fct.tc4.TinyMicrophone
 import com.fct.tc4.R
+import com.fct.tc4.TinyIpp
 import com.fct.tc4.ui.misc.ConfigManager
 import com.fct.tc4.ui.misc.Global
 import com.fct.tc4.ui.misc.UpdateChecker
@@ -130,6 +131,7 @@ class ContainerMainViewModel(
         killXServer()
         TinyAudio.stop()
         TinyMicrophone.stop()
+        TinyIpp.stop()
         Global.newSession()
         Global.setupEnvironment()
         val merged = collectEnabledOptions()
@@ -231,6 +233,9 @@ class ContainerMainViewModel(
             when (type) {
                 "audio" -> {
                     TinyAudio.start()
+                }
+                "print" -> {
+                    TinyIpp.start()
                 }
                 "webview" -> {
                     if (!Global.autoLaunchGui) continue

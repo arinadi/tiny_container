@@ -38,6 +38,7 @@ import com.fct.tc4.databinding.Tc4FragmentFeaturesBinding
 import com.fct.tc4.databinding.Tc4FeatureAudioBinding
 import com.fct.tc4.databinding.Tc4FeatureAvncBinding
 import com.fct.tc4.databinding.Tc4FeatureMicrophoneBinding
+import com.fct.tc4.databinding.Tc4FeaturePrintBinding
 import com.fct.tc4.databinding.Tc4FeatureWebviewBinding
 import com.fct.tc4.databinding.Tc4FeatureUnknownBinding
 import com.fct.tc4.databinding.Tc4FeatureX11Binding
@@ -231,6 +232,7 @@ private class FeaturesAdapter(
         private const val TYPE_WEBVIEW = 2
         private const val TYPE_AVNC = 3
         private const val TYPE_X11 = 4
+        private const val TYPE_PRINT = 7
         private const val TYPE_UNKNOWN = 5
         private const val TYPE_LSTAT_CACHE = 6
     }
@@ -253,6 +255,9 @@ private class FeaturesAdapter(
                 val changes = mutableListOf<String>()
                 when {
                     old is AudioFeature && new is AudioFeature -> {
+                        if (old.enabled != new.enabled) changes.add("enabled")
+                    }
+                    old is PrintFeature && new is PrintFeature -> {
                         if (old.enabled != new.enabled) changes.add("enabled")
                     }
                     old is WebViewFeature && new is WebViewFeature -> {
@@ -280,6 +285,7 @@ private class FeaturesAdapter(
     override fun getItemViewType(position: Int): Int = when (items[position]) {
         is AudioFeature -> TYPE_AUDIO
         is MicrophoneFeature -> TYPE_MICROPHONE
+        is PrintFeature -> TYPE_PRINT
         is WebViewFeature -> TYPE_WEBVIEW
         is AvncFeature -> TYPE_AVNC
         is X11Feature -> TYPE_X11
@@ -310,6 +316,10 @@ private class FeaturesAdapter(
                 val b = Tc4FeatureX11Binding.inflate(inflater, parent, false)
                 X11VH(b, callbacks)
             }
+            TYPE_PRINT -> {
+                val b = Tc4FeaturePrintBinding.inflate(inflater, parent, false)
+                PrintVH(b, callbacks)
+            }
             TYPE_UNKNOWN -> {
                 val b = Tc4FeatureUnknownBinding.inflate(inflater, parent, false)
                 UnknownVH(b)
@@ -331,6 +341,7 @@ private class FeaturesAdapter(
             is AvncVH -> holder.bind(items[position] as AvncFeature, position, itemCount)
             is X11VH -> holder.bind(items[position] as X11Feature, position, itemCount)
             is LstatCacheVH -> holder.bind(items[position] as LstatCacheFeature, position, itemCount)
+            is PrintVH -> holder.bind(items[position] as PrintFeature, position, itemCount)
             is UnknownVH -> holder.bind(items[position] as UnknownFeature, position, itemCount)
         }
     }
@@ -351,6 +362,7 @@ private class FeaturesAdapter(
             is AudioVH -> holder.bindPartial(items[position] as AudioFeature, changes)
             is WebViewVH -> holder.bindPartial(items[position] as WebViewFeature, changes)
             is AvncVH -> holder.bindPartial(items[position] as AvncFeature, changes)
+            is PrintVH -> holder.bindPartial(items[position] as PrintFeature, changes)
             is X11VH -> holder.bindPartial(items[position] as X11Feature, changes)
             is LstatCacheVH -> holder.bindPartial(items[position] as LstatCacheFeature, changes)
         }
@@ -401,6 +413,33 @@ private class MicrophoneVH(
         binding.enabled.isChecked = item.enabled
         binding.enabled.setOnCheckedChangeListener { _, isChecked ->
             callbacks.onMicEnabledToggle(item.index, isChecked)
+        }
+    }
+}
+
+private class PrintVH(
+    private val binding: Tc4FeaturePrintBinding,
+    private val callbacks: FeatureCallbacks
+) : ListItemViewHolder(binding.root) {
+
+    fun bind(item: PrintFeature, position: Int, itemCount: Int) {
+        super.bind(position, itemCount)
+        binding.name.text = item.name
+        binding.description.text = item.description
+        binding.enabled.setOnCheckedChangeListener(null)
+        binding.enabled.isChecked = item.enabled
+        binding.enabled.setOnCheckedChangeListener { _, isChecked ->
+            callbacks.onEnabledToggle(item.index, isChecked)
+        }
+    }
+
+    fun bindPartial(item: PrintFeature, changes: List<String>) {
+        if ("enabled" in changes) {
+            binding.enabled.setOnCheckedChangeListener(null)
+            binding.enabled.isChecked = item.enabled
+            binding.enabled.setOnCheckedChangeListener { _, isChecked ->
+                callbacks.onEnabledToggle(item.index, isChecked)
+            }
         }
     }
 }
