@@ -20,6 +20,7 @@ package com.fct.tc4.ui.page
 import android.content.Context.INPUT_METHOD_SERVICE
 import android.graphics.Color
 import android.os.Bundle
+import android.util.TypedValue
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -61,20 +62,48 @@ class TerminalFragment : Fragment() {
         binding.terminalView.setTextSize(Global.terminalFontSize)
         binding.terminalView.attachSession(Global.terminalSession)
 
-        val ta = requireContext().theme.obtainStyledAttributes(
-            intArrayOf(android.R.attr.textColorPrimary)
-        )
-        val fgColor = ta.getColor(0, Color.WHITE)
-        ta.recycle()
+        // 比较 surface 和 surfaceInverse，选更暗的作背景
+        fun colorLuma(c: Int): Int {
+            val r = Color.red(c)
+            val g = Color.green(c)
+            val b = Color.blue(c)
+            return (299 * r + 587 * g + 114 * b) / 1000
+        }
 
+        val tv = TypedValue()
+        val theme = requireContext().theme
+
+        theme.resolveAttribute(com.google.android.material.R.attr.colorSurface, tv, true)
+        val surface = tv.data
+        theme.resolveAttribute(com.google.android.material.R.attr.colorSurfaceInverse, tv, true)
+        val surfaceInverse = tv.data
+
+        val (darkBg, fgColor) = if (colorLuma(surface) <= colorLuma(surfaceInverse)) {
+            theme.resolveAttribute(com.google.android.material.R.attr.colorOnSurface, tv, true)
+            surface to tv.data
+        } else {
+            theme.resolveAttribute(com.google.android.material.R.attr.colorOnSurfaceInverse, tv, true)
+            surfaceInverse to tv.data
+        }
+
+        // 背景：75% 不透明
+        val bgColor = (darkBg and 0x00FFFFFF) or 0x80000000.toInt()
+        binding.terminalView.setBackgroundColor(bgColor)
+
+        // 字体
         val emulator = Global.terminalSession?.emulator
         emulator?.mColors?.mCurrentColors?.let { colors ->
             colors[TextStyle.COLOR_INDEX_FOREGROUND] = fgColor
         }
         binding.terminalView.onScreenUpdated()
 
+        // extraKeys：维持原逻辑不改
+        val ta = theme.obtainStyledAttributes(intArrayOf(android.R.attr.textColorPrimary))
+        val ekColor = ta.getColor(0, Color.WHITE)
+        ta.recycle()
+
         val extraKeys = binding.extraKeys
-        extraKeys.setTextColor(fgColor)
+        extraKeys.setTextColor(ekColor)
         binding.terminalView.setTerminalViewClient(object : BasicViewClient(binding.terminalView) {
             override fun onScale(scale: Float): Float {
                 val result = super.onScale(scale)
