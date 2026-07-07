@@ -94,6 +94,14 @@ data class LstatCacheFeature(
     val path: List<String>
 ) : FeatureItem()
 
+data class StorageFeature(
+    override val index: Int,
+    override val type: String,
+    override val name: String,
+    override val description: String,
+    val enabled: Boolean
+) : FeatureItem()
+
 /** 未实现的功能类型兜底，避免未知 type 导致崩溃 */
 data class UnknownFeature(
     override val index: Int,
@@ -269,6 +277,8 @@ class FeaturesViewModel(application: Application) : AndroidViewModel(application
             "lstat-cache" -> LstatCacheFeature(index, type, name, description,
                 enabled = map["enabled"] as? Boolean ?: false,
                 path = (map["path"] as? List<*>)?.filterIsInstance<String>() ?: emptyList())
+            "storage" -> StorageFeature(index, type, name, description,
+                enabled = map["enabled"] as? Boolean ?: false)
             else -> UnknownFeature(index, type, name, description)
         }
     }

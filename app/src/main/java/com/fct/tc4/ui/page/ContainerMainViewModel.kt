@@ -29,6 +29,7 @@ import com.fct.tc4.TinyAudio
 import com.fct.tc4.TinyMicrophone
 import com.fct.tc4.R
 import com.fct.tc4.TinyIpp
+import com.fct.tc4.TinyStorage
 import com.fct.tc4.ui.misc.ConfigManager
 import com.fct.tc4.ui.misc.Global
 import com.fct.tc4.ui.misc.UpdateChecker
@@ -132,6 +133,7 @@ class ContainerMainViewModel(
         TinyAudio.stop()
         TinyMicrophone.stop()
         TinyIpp.stop()
+        TinyStorage.stop()
         Global.newSession()
         Global.setupEnvironment()
         val merged = collectEnabledOptions()
@@ -194,6 +196,8 @@ class ContainerMainViewModel(
         val merged = collectEnabledOptions()
         // 处理 lstat-cache feature：解析路径，生成 --assured-path= 参数
         merged.args.addAll(collectLstatCacheArgs())
+        // 处理 storage feature：生成 --tiny-storage 和初始 --bind= 参数
+        collectStorageArgs(merged.args)
         for (cmd in merged.preStartHostCommands) {
             Global.sendCommand(cmd)
         }
@@ -236,6 +240,9 @@ class ContainerMainViewModel(
                 }
                 "print" -> {
                     TinyIpp.start()
+                }
+                "storage" -> {
+                    TinyStorage.start()
                 }
                 "webview" -> {
                     if (!Global.autoLaunchGui) continue
@@ -413,6 +420,27 @@ class ContainerMainViewModel(
         } catch (e: SecurityException) {
             Log.w(TAG, "lstat-cache: 无权限 : $parentDir", e)
             emptyList()
+        }
+    }
+
+    /**
+     * 如果 storage feature 启用，检测已插入的外部存储设备，
+     * 将 --tiny-storage 和初始 --bind= 参数注入 args 列表。
+     */
+    @Suppress("UNCHECKED_CAST")
+    private fun collectStorageArgs(args: MutableList<String>) {
+        val features = config["feature"] as? List<Map<String, Any>> ?: return
+        val storageFeature = features.firstOrNull {
+            (it["type"] as? String) == "storage" && it["enabled"] == true
+        } ?: return
+
+        // 通知 proot 启动 socket listener
+        args.add("--tiny-storage")
+
+        // 检测当前已挂载的外部存储，添加静态 bind
+        val devices = TinyStorage.detectExternalStorage()
+        for ((path, name) in devices) {
+            args.add("--bind=$path:/mnt/$name")
         }
     }
 

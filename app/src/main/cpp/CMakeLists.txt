@@ -18,6 +18,11 @@ add_library(tiny_ipp_jni SHARED tiny_ipp_jni.c)
 target_link_libraries(tiny_ipp_jni log)
 target_compile_options(tiny_ipp_jni PRIVATE -Wall -Wextra -O2 -std=c11)
 
+# ── TinyStorage (external storage monitor) ────────────────────────
+add_library(tiny_storage_jni SHARED tiny_storage_jni.c)
+target_link_libraries(tiny_storage_jni log)
+target_compile_options(tiny_storage_jni PRIVATE -Wall -Wextra -O2 -std=c11)
+
 
 
 

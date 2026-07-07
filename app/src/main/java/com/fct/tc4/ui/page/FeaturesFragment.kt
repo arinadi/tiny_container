@@ -43,6 +43,7 @@ import com.fct.tc4.databinding.Tc4FeatureWebviewBinding
 import com.fct.tc4.databinding.Tc4FeatureUnknownBinding
 import com.fct.tc4.databinding.Tc4FeatureX11Binding
 import com.fct.tc4.databinding.Tc4FeatureLstatCacheBinding
+import com.fct.tc4.databinding.Tc4FeatureStorageBinding
 import com.fct.tc4.ui.misc.FeatureEditDialogFragment
 import com.fct.tc4.ui.misc.Global
 import com.google.android.material.listitem.ListItemViewHolder
@@ -235,6 +236,7 @@ private class FeaturesAdapter(
         private const val TYPE_PRINT = 7
         private const val TYPE_UNKNOWN = 5
         private const val TYPE_LSTAT_CACHE = 6
+        private const val TYPE_STORAGE = 8
     }
 
     private var items: List<FeatureItem> = emptyList()
@@ -274,6 +276,9 @@ private class FeaturesAdapter(
                     old is LstatCacheFeature && new is LstatCacheFeature -> {
                         if (old.enabled != new.enabled) changes.add("enabled")
                     }
+                    old is StorageFeature && new is StorageFeature -> {
+                        if (old.enabled != new.enabled) changes.add("enabled")
+                    }
                 }
                 return if (changes.isEmpty()) null else changes
             }
@@ -290,6 +295,7 @@ private class FeaturesAdapter(
         is AvncFeature -> TYPE_AVNC
         is X11Feature -> TYPE_X11
         is LstatCacheFeature -> TYPE_LSTAT_CACHE
+        is StorageFeature -> TYPE_STORAGE
         is UnknownFeature -> TYPE_UNKNOWN
     }
 
@@ -320,6 +326,10 @@ private class FeaturesAdapter(
                 val b = Tc4FeaturePrintBinding.inflate(inflater, parent, false)
                 PrintVH(b, callbacks)
             }
+            TYPE_STORAGE -> {
+                val b = Tc4FeatureStorageBinding.inflate(inflater, parent, false)
+                StorageVH(b, callbacks)
+            }
             TYPE_UNKNOWN -> {
                 val b = Tc4FeatureUnknownBinding.inflate(inflater, parent, false)
                 UnknownVH(b)
@@ -342,6 +352,7 @@ private class FeaturesAdapter(
             is X11VH -> holder.bind(items[position] as X11Feature, position, itemCount)
             is LstatCacheVH -> holder.bind(items[position] as LstatCacheFeature, position, itemCount)
             is PrintVH -> holder.bind(items[position] as PrintFeature, position, itemCount)
+            is StorageVH -> holder.bind(items[position] as StorageFeature, position, itemCount)
             is UnknownVH -> holder.bind(items[position] as UnknownFeature, position, itemCount)
         }
     }
@@ -365,6 +376,7 @@ private class FeaturesAdapter(
             is PrintVH -> holder.bindPartial(items[position] as PrintFeature, changes)
             is X11VH -> holder.bindPartial(items[position] as X11Feature, changes)
             is LstatCacheVH -> holder.bindPartial(items[position] as LstatCacheFeature, changes)
+            is StorageVH -> holder.bindPartial(items[position] as StorageFeature, changes)
         }
     }
 
@@ -583,6 +595,33 @@ private class X11VH(
     }
 
     fun bindPartial(item: X11Feature, changes: List<String>) {
+        if ("enabled" in changes) {
+            binding.enabled.setOnCheckedChangeListener(null)
+            binding.enabled.isChecked = item.enabled
+            binding.enabled.setOnCheckedChangeListener { _, isChecked ->
+                callbacks.onEnabledToggle(item.index, isChecked)
+            }
+        }
+    }
+}
+
+private class StorageVH(
+    private val binding: Tc4FeatureStorageBinding,
+    private val callbacks: FeatureCallbacks
+) : ListItemViewHolder(binding.root) {
+
+    fun bind(item: StorageFeature, position: Int, itemCount: Int) {
+        super.bind(position, itemCount)
+        binding.name.text = item.name
+        binding.description.text = item.description
+        binding.enabled.setOnCheckedChangeListener(null)
+        binding.enabled.isChecked = item.enabled
+        binding.enabled.setOnCheckedChangeListener { _, isChecked ->
+            callbacks.onEnabledToggle(item.index, isChecked)
+        }
+    }
+
+    fun bindPartial(item: StorageFeature, changes: List<String>) {
         if ("enabled" in changes) {
             binding.enabled.setOnCheckedChangeListener(null)
             binding.enabled.isChecked = item.enabled
