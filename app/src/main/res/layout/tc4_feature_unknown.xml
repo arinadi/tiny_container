@@ -20,20 +20,20 @@
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:padding="2dp"
         android:orientation="horizontal">
         <ImageView
-            android:layout_width="48dp"
-            android:layout_height="48dp"
+            android:layout_width="36dp"
+            android:layout_height="36dp"
             android:src="@drawable/indeterminate_question_box_24dp_eaddff_fill0_wght400_grad0_opsz24"
             android:importantForAccessibility="no"
-            android:layout_marginVertical="16dp"
-            android:layout_marginStart="16dp"
+            android:layout_marginTop="8dp"
             app:tint="?attr/colorPrimary" />
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:orientation="vertical"
-            android:layout_margin="16dp">
+            android:layout_marginStart="16dp">
             <TextView
                 style="@style/TextAppearance.Material3.TitleMedium"
                 android:id="@+id/name"

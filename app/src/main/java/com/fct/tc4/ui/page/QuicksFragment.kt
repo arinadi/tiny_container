@@ -300,7 +300,7 @@ class QuicksFragment : Fragment() {
         viewLifecycleOwner.lifecycleScope.launch {
             viewModel.displayState.collect { state ->
                 binding.name.text = state.headerTitle
-                binding.description.text = state.headerDesc
+                binding.description.text = state.headerDesc.trim()
                 renderBreadcrumbs(state.breadcrumbs)
 
                 val isEmpty = state.nodes.isEmpty()
@@ -570,7 +570,7 @@ private class CommandVH(
     fun bind(item: QuicksNodeItem.CommandItem, position: Int, itemCount: Int) {
         super.bind(position, itemCount)
         binding.name.text = item.name
-        binding.description.text = item.description
+        binding.description.text = item.description.trim()
         binding.description.visibility = if (item.description.isEmpty()) View.GONE else View.VISIBLE
         binding.itemCard.setCardBackgroundColor(
             if (item.isSelected) MaterialColors.getColor(
@@ -595,7 +595,7 @@ private class FolderVH(
     fun bind(item: QuicksNodeItem, position: Int, itemCount: Int) {
         super.bind(position, itemCount)
         binding.name.text = item.name
-        binding.description.text = item.description
+        binding.description.text = item.description.trim()
         binding.description.visibility = if (item.description.isEmpty()) View.GONE else View.VISIBLE
         binding.itemCard.setCardBackgroundColor(
             if (item.isSelected) MaterialColors.getColor(
@@ -620,7 +620,7 @@ private class OptionVH(
     fun bind(item: QuicksNodeItem.OptionItem, position: Int, itemCount: Int) {
         super.bind(position, itemCount)
         binding.name.text = item.name
-        binding.description.text = item.description
+        binding.description.text = item.description.trim()
         binding.description.visibility = if (item.description.isEmpty()) View.GONE else View.VISIBLE
         binding.enabled.setOnCheckedChangeListener(null)
         binding.enabled.isChecked = item.enabled

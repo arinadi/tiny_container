@@ -19,7 +19,8 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center"
-                android:paddingVertical="24dp"
+                android:paddingTop="8dp"
+                android:paddingBottom="4dp"
                 app:singleSelection="true">
                 <Button
                     style="?attr/materialButtonTonalStyle"
@@ -99,14 +100,14 @@
             android:layout_height="match_parent"
             android:layout_weight="0"
             android:background="?attr/colorOutlineVariant"
-            android:layout_marginTop="108dp"
+            android:layout_marginTop="96dp"
             android:layout_marginBottom="12dp" />
         <LinearLayout
             android:layout_width="0dp"
             android:layout_height="match_parent"
             android:layout_weight="1"
             android:orientation="vertical"
-            android:paddingTop="48dp">
+            android:paddingTop="36dp">
 
             <HorizontalScrollView
                 android:id="@+id/breadcrumb"
