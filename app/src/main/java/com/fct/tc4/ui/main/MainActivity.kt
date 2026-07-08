@@ -377,9 +377,11 @@ class MainActivity : AppCompatActivity() {
 
     override fun onDestroy() {
         super.onDestroy()
-        startService(Intent(
-            this, CmdEntryPointService::class.java
-        ).apply { action = CmdEntryPointService.ACTION_STOP })
+        if (!isChangingConfigurations) {
+            startService(Intent(
+                this, CmdEntryPointService::class.java
+            ).apply { action = CmdEntryPointService.ACTION_STOP })
+        }
     }
 
     companion object {
