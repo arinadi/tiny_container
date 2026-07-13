@@ -19,6 +19,8 @@
     <string name="tc4_label_adapt_screen">Anpassa till skärmstorlek</string>
     <string name="tc4_label_effective_next_launch">Träder i kraft vid nästa containerstart</string>
     <string name="tc4_label_effective_this_session">Gäller endast denna session. Måste inaktiveras innan avslut.</string>
+    <string name="tc4_label_use_unix_socket">Ta emot VNC via Unix-socket</string>
+    <string name="tc4_label_use_unix_socket_desc">Kringgå nätverksstacken, spara portar, förbättra prestanda</string>
     <string name="tc4_label_version">Version %1$s</string>
     <string name="tc4_container_title">Containerhantering</string>
     <string name="tc4_container_empty_hint">Inga containrar, tryck uppe till höger för att importera</string>

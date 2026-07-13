@@ -150,6 +150,9 @@ class FeaturesFragment : Fragment() {
                     viewModel.onEnabledToggle(index, false)
                 }
             }
+            override fun onUseUnixSocketToggle(index: Int, useUnixSocket: Boolean) {
+                viewModel.onUseUnixSocketToggle(index, useUnixSocket)
+            }
         })
         binding.recyclerView.adapter = adapter
         binding.recyclerView.layoutManager = LinearLayoutManager(requireContext())
@@ -219,6 +222,7 @@ interface FeatureCallbacks {
     fun onEditFeature(index: Int, type: String)
     fun onShareWebView(index: Int)
     fun onMicEnabledToggle(index: Int, enabled: Boolean) {}
+    fun onUseUnixSocketToggle(index: Int, useUnixSocket: Boolean) {}
 }
 
 // ===================== 适配器与 ViewHolder =====================
@@ -269,6 +273,7 @@ private class FeaturesAdapter(
                         if (old.enabled != new.enabled) changes.add("enabled")
                         if (old.adaptToScreenSize != new.adaptToScreenSize) changes.add("adapt")
                         if (old.scaleRatio != new.scaleRatio) changes.add("ratio")
+                        if (old.useUnixSocket != new.useUnixSocket) changes.add("unix")
                     }
                     old is X11Feature && new is X11Feature -> {
                         if (old.enabled != new.enabled) changes.add("enabled")
@@ -513,6 +518,12 @@ private class AvncVH(
         }
         binding.ratio.isEnabled = item.adaptToScreenSize
 
+        binding.useUnixSocket.setOnCheckedChangeListener(null)
+        binding.useUnixSocket.isChecked = item.useUnixSocket
+        binding.useUnixSocket.setOnCheckedChangeListener { _, isChecked ->
+            callbacks.onUseUnixSocketToggle(item.index, isChecked)
+        }
+
         binding.ratio.value = ((item.scaleRatio * 20).roundToInt() * 0.05).toFloat()
         binding.ratioText.text = formatScaleRatio(binding.ratio.value)
         binding.ratio.tag = item.index
@@ -559,6 +570,13 @@ private class AvncVH(
         if ("ratio" in changes) {
             binding.ratio.value = ((item.scaleRatio * 20).roundToInt() * 0.05).toFloat()
             binding.ratioText.text = formatScaleRatio(binding.ratio.value)
+        }
+        if ("unix" in changes) {
+            binding.useUnixSocket.setOnCheckedChangeListener(null)
+            binding.useUnixSocket.isChecked = item.useUnixSocket
+            binding.useUnixSocket.setOnCheckedChangeListener { _, isChecked ->
+                callbacks.onUseUnixSocketToggle(item.index, isChecked)
+            }
         }
     }
 

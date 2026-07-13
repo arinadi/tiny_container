@@ -22,6 +22,8 @@
     <string name="tc4_label_adapt_screen">خۆگونجاندن لەگەڵ قەبارەی شاشە</string>
     <string name="tc4_label_effective_next_launch">لە هەڵدانی داهاتووی کۆنتێنەردا کاریگەر دەبێت</string>
     <string name="tc4_label_effective_this_session">تەنها بۆ ئەم دانیشتنە کاریگەرە. پێویستە پێش دەرچوون ناچالاک بکرێت.</string>
+    <string name="tc4_label_use_unix_socket">وەرگرتنی VNC لە ڕێگەی سۆکێتی Unix</string>
+    <string name="tc4_label_use_unix_socket_desc">تێپەڕاندنی ستێکی تۆڕ، پاشەکەوتکردنی پۆرت، باشترکردنی کارایی</string>
     <string name="tc4_label_version">وەشانی %1$s</string>
 
     <string name="tc4_container_title">بەڕێوەبردنی کۆنتێنەر</string>

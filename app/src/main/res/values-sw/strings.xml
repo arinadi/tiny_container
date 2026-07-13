@@ -19,6 +19,8 @@
     <string name="tc4_label_adapt_screen">Rekebisha kwa Ukubwa wa Skrini</string>
     <string name="tc4_label_effective_next_launch">Inatumika kwenye uzinduzi unaofuata wa kontena</string>
     <string name="tc4_label_effective_this_session">Inatumika kwa kikao hiki pekee. Lazima izimwe kabla ya kutoka.</string>
+    <string name="tc4_label_use_unix_socket">Pokea VNC kupitia tundu la Unix</string>
+    <string name="tc4_label_use_unix_socket_desc">Pita nje ya safu ya mtandao, hifadhi bandari, boresha utendaji</string>
     <string name="tc4_label_version">Toleo %1$s</string>
     <string name="tc4_container_title">Usimamizi wa Kontena</string>
     <string name="tc4_container_empty_hint">Hakuna kontena, gusa juu kulia ili kuingiza</string>

@@ -21,6 +21,8 @@
     <string name="tc4_label_adapt_screen">画面サイズに適応</string>
     <string name="tc4_label_effective_next_launch">次回のコンテナ起動時に有効</string>
     <string name="tc4_label_effective_this_session">このセッションのみ有効。終了前に無効にする必要があります。</string>
+    <string name="tc4_label_use_unix_socket">UnixソケットでVNCを受信</string>
+    <string name="tc4_label_use_unix_socket_desc">ネットワークスタックをバイパスし、ポートを節約、パフォーマンスを向上</string>
     <string name="tc4_label_version">バージョン %1$s</string>
 
     <string name="tc4_container_title">コンテナ管理</string>

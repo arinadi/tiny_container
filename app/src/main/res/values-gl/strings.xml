@@ -21,6 +21,8 @@
     <string name="tc4_label_adapt_screen">Adaptar ao tamaño da pantalla</string>
     <string name="tc4_label_effective_next_launch">Terá efecto no seguinte lanzamento do contedor</string>
     <string name="tc4_label_effective_this_session">Só ten efecto nesta sesión. Debe desactivarse antes de saír.</string>
+    <string name="tc4_label_use_unix_socket">Recibir VNC mediante socket Unix</string>
+    <string name="tc4_label_use_unix_socket_desc">Evitar a pila de rede, aforrar portos, mellorar o rendemento</string>
     <string name="tc4_label_version">Versión %1$s</string>
 
     <string name="tc4_container_title">Xestión de contedores</string>

@@ -19,6 +19,8 @@
     <string name="tc4_label_adapt_screen">Sesuaikan dengan Saiz Skrin</string>
     <string name="tc4_label_effective_next_launch">Berkuat kuasa pada pelancaran kontena seterusnya</string>
     <string name="tc4_label_effective_this_session">Hanya berkuat kuasa sesi ini. Mesti dinyahdayakan sebelum keluar.</string>
+    <string name="tc4_label_use_unix_socket">Terima VNC melalui soket Unix</string>
+    <string name="tc4_label_use_unix_socket_desc">Memintas tindanan rangkaian, menjimatkan port, meningkatkan prestasi</string>
     <string name="tc4_label_version">Versi %1$s</string>
     <string name="tc4_container_title">Pengurusan Kontena</string>
     <string name="tc4_container_empty_hint">Tiada kontena, ketik kanan atas untuk import</string>

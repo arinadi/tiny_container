@@ -74,7 +74,8 @@ data class AvncFeature(
     override val description: String,
     val enabled: Boolean,
     val adaptToScreenSize: Boolean,
-    val scaleRatio: Double
+    val scaleRatio: Double,
+    val useUnixSocket: Boolean
 ) : FeatureItem()
 
 data class X11Feature(
@@ -194,6 +195,15 @@ class FeaturesViewModel(application: Application) : AndroidViewModel(application
         }
     }
 
+    @Suppress("UNCHECKED_CAST")
+    fun onUseUnixSocketToggle(index: Int, useUnixSocket: Boolean) {
+        featureMaps?.getOrNull(index)?.let { map ->
+            map["use_unix_socket"] = useUnixSocket
+            saveAction?.invoke()
+            refresh()
+        }
+    }
+
     // ===================== 供 Fragment 调用的编辑方法 =====================
 
     @Suppress("UNCHECKED_CAST")
@@ -271,7 +281,8 @@ class FeaturesViewModel(application: Application) : AndroidViewModel(application
             "avnc" -> AvncFeature(index, type, name, description,
                 enabled = map["enabled"] as? Boolean ?: false,
                 adaptToScreenSize = map["adapt_to_screen_size"] as? Boolean ?: false,
-                scaleRatio = (map["scale_ratio"] as? Number)?.toDouble() ?: 0.0)
+                scaleRatio = (map["scale_ratio"] as? Number)?.toDouble() ?: 0.0,
+                useUnixSocket = map["use_unix_socket"] as? Boolean ?: true)
             "x11" -> X11Feature(index, type, name, description,
                 enabled = map["enabled"] as? Boolean ?: false)
             "lstat-cache" -> LstatCacheFeature(index, type, name, description,

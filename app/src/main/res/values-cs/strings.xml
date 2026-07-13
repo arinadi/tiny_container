@@ -22,6 +22,8 @@
     <string name="tc4_label_adapt_screen">Přizpůsobit velikosti obrazovky</string>
     <string name="tc4_label_effective_next_launch">Projeví se při příštím spuštění kontejneru</string>
     <string name="tc4_label_effective_this_session">Platí pouze pro tuto relaci. Před ukončením je nutné zakázat.</string>
+    <string name="tc4_label_use_unix_socket">Přijímat VNC přes Unix socket</string>
+    <string name="tc4_label_use_unix_socket_desc">Obejít síťový zásobník, ušetřit porty, zlepšit výkon</string>
     <string name="tc4_label_version">Verze %1$s</string>
 
     <string name="tc4_container_title">Správa kontejnerů</string>

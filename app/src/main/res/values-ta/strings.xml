@@ -19,6 +19,8 @@
     <string name="tc4_label_adapt_screen">திரை அளவுக்கு ஏற்ப மாற்று</string>
     <string name="tc4_label_effective_next_launch">அடுத்த கொள்கலன் தொடக்கத்தில் நடைமுறைக்கு வரும்</string>
     <string name="tc4_label_effective_this_session">இந்த அமர்வுக்கு மட்டுமே செல்லுபடியாகும். வெளியேறும் முன் முடக்க வேண்டும்.</string>
+    <string name="tc4_label_use_unix_socket">யூனிக்ஸ் சாக்கெட் வழியாக VNC பெறவும்</string>
+    <string name="tc4_label_use_unix_socket_desc">நெட்வொர்க் ஸ்டாக்கை தவிர்க்கவும், போர்ட்களை சேமிக்கவும், செயல்திறனை மேம்படுத்தவும்</string>
     <string name="tc4_label_version">பதிப்பு %1$s</string>
     <string name="tc4_container_title">கொள்கலன் மேலாண்மை</string>
     <string name="tc4_container_empty_hint">கொள்கலன்கள் இல்லை, இறக்குமதி செய்ய மேல் வலதுபுறத்தைத் தட்டவும்</string>

@@ -21,6 +21,8 @@
     <string name="tc4_label_adapt_screen">화면 크기에 맞춤</string>
     <string name="tc4_label_effective_next_launch">다음 컨테이너 실행 시 적용</string>
     <string name="tc4_label_effective_this_session">이 세션에만 적용됩니다. 종료 전에 비활성화해야 합니다.</string>
+    <string name="tc4_label_use_unix_socket">Unix 소켓으로 VNC 수신</string>
+    <string name="tc4_label_use_unix_socket_desc">네트워크 스택 우회, 포트 절약, 성능 향상</string>
     <string name="tc4_label_version">버전 %1$s</string>
 
     <string name="tc4_container_title">컨테이너 관리</string>

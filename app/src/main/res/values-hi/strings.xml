@@ -21,6 +21,8 @@
     <string name="tc4_label_adapt_screen">स्क्रीन आकार के अनुसार ढालें</string>
     <string name="tc4_label_effective_next_launch">अगले कंटेनर लॉन्च पर प्रभावी होगा</string>
     <string name="tc4_label_effective_this_session">केवल इस सत्र के लिए प्रभावी। बाहर निकलने से पहले अक्षम करना होगा।</string>
+    <string name="tc4_label_use_unix_socket">यूनिक्स सॉकेट के माध्यम से VNC प्राप्त करें</string>
+    <string name="tc4_label_use_unix_socket_desc">नेटवर्क स्टैक को बायपास करें, पोर्ट बचाएं, प्रदर्शन में सुधार करें</string>
     <string name="tc4_label_version">संस्करण %1$s</string>
 
     <string name="tc4_container_title">कंटेनर प्रबंधन</string>

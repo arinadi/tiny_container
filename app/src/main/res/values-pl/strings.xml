@@ -19,6 +19,8 @@
     <string name="tc4_label_adapt_screen">Dostosuj do rozmiaru ekranu</string>
     <string name="tc4_label_effective_next_launch">Zadziała przy następnym uruchomieniu kontenera</string>
     <string name="tc4_label_effective_this_session">Dotyczy tylko tej sesji. Należy wyłączyć przed wyjściem.</string>
+    <string name="tc4_label_use_unix_socket">Odbierać VNC przez gniazdo Unix</string>
+    <string name="tc4_label_use_unix_socket_desc">Ominąć stos sieciowy, oszczędzać porty, poprawić wydajność</string>
     <string name="tc4_label_version">Wersja %1$s</string>
     <string name="tc4_container_title">Zarządzanie kontenerami</string>
     <string name="tc4_container_empty_hint">Brak kontenerów, dotknij prawy górny róg, aby zaimportować</string>

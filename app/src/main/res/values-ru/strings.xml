@@ -19,6 +19,8 @@
     <string name="tc4_label_adapt_screen">Подстроить под размер экрана</string>
     <string name="tc4_label_effective_next_launch">Вступит в силу при следующем запуске контейнера</string>
     <string name="tc4_label_effective_this_session">Действует только в этой сессии. Отключите перед выходом.</string>
+    <string name="tc4_label_use_unix_socket">Получать VNC через Unix-сокет</string>
+    <string name="tc4_label_use_unix_socket_desc">Обход сетевого стека, экономия портов, повышение производительности</string>
     <string name="tc4_label_version">Версия %1$s</string>
     <string name="tc4_container_title">Управление контейнерами</string>
     <string name="tc4_container_empty_hint">Нет контейнеров, нажмите вверху справа для импорта</string>

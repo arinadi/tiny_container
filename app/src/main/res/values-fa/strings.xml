@@ -22,6 +22,8 @@
     <string name="tc4_label_adapt_screen">تطبیق با اندازه صفحه</string>
     <string name="tc4_label_effective_next_launch">در راه‌اندازی بعدی کانتینر اعمال می‌شود</string>
     <string name="tc4_label_effective_this_session">فقط برای این جلسه معتبر است. باید قبل از خروج غیرفعال شود.</string>
+    <string name="tc4_label_use_unix_socket">دریافت VNC از طریق سوکت یونیکس</string>
+    <string name="tc4_label_use_unix_socket_desc">دور زدن پشته شبکه، صرفه‌جویی در پورت، بهبود عملکرد</string>
     <string name="tc4_label_version">نسخه %1$s</string>
 
     <string name="tc4_container_title">مدیریت کانتینر</string>

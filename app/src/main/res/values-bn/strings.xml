@@ -24,6 +24,8 @@
     <string name="tc4_label_adapt_screen">স্ক্রিন সাইজে মানানসই</string>
     <string name="tc4_label_effective_next_launch">পরবর্তী কন্টেইনার লঞ্চে কার্যকর হবে</string>
     <string name="tc4_label_effective_this_session">শুধুমাত্র এই সেশনে কার্যকর। প্রস্থানের আগে নিষ্ক্রিয় করতে হবে।</string>
+    <string name="tc4_label_use_unix_socket">ইউনিক্স সকেটের মাধ্যমে VNC গ্রহণ করুন</string>
+    <string name="tc4_label_use_unix_socket_desc">নেটওয়ার্ক স্ট্যাক বাইপাস, পোর্ট সংরক্ষণ, কর্মক্ষমতা উন্নত</string>
     <string name="tc4_label_version">সংস্করণ %1$s</string>
 
     <!-- ==================== Container Management ==================== -->

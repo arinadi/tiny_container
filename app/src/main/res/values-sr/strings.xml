@@ -19,6 +19,8 @@
     <string name="tc4_label_adapt_screen">Прилагоди величини екрана</string>
     <string name="tc4_label_effective_next_launch">Ступа на снагу при следећем покретању контејнера</string>
     <string name="tc4_label_effective_this_session">Важеће само за ову сесију. Мора се онемогућити пре изласка.</string>
+    <string name="tc4_label_use_unix_socket">Primati VNC preko Unix socketa</string>
+    <string name="tc4_label_use_unix_socket_desc">Zaobići mrežni stek, uštedeti portove, poboljšati performanse</string>
     <string name="tc4_label_version">Верзија %1$s</string>
     <string name="tc4_container_title">Управљање контејнерима</string>
     <string name="tc4_container_empty_hint">Нема контејнера, додирните горе десно за увоз</string>

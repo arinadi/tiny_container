@@ -19,6 +19,8 @@
     <string name="tc4_label_adapt_screen">Thích ứng với Kích thước Màn hình</string>
     <string name="tc4_label_effective_next_launch">Có hiệu lực vào lần khởi chạy container tiếp theo</string>
     <string name="tc4_label_effective_this_session">Chỉ có hiệu lực trong phiên này. Phải tắt trước khi thoát.</string>
+    <string name="tc4_label_use_unix_socket">Nhận VNC qua socket Unix</string>
+    <string name="tc4_label_use_unix_socket_desc">Bỏ qua ngăn xếp mạng, tiết kiệm cổng, cải thiện hiệu suất</string>
     <string name="tc4_label_version">Phiên bản %1$s</string>
     <string name="tc4_container_title">Quản lý Container</string>
     <string name="tc4_container_empty_hint">Không có container, chạm góc trên bên phải để nhập</string>

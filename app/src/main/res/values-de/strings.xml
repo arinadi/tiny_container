@@ -22,6 +22,8 @@
     <string name="tc4_label_adapt_screen">An Bildschirmgröße anpassen</string>
     <string name="tc4_label_effective_next_launch">Wird beim nächsten Container-Start wirksam</string>
     <string name="tc4_label_effective_this_session">Nur für diese Sitzung wirksam. Muss vor dem Beenden deaktiviert werden.</string>
+    <string name="tc4_label_use_unix_socket">VNC über Unix-Socket empfangen</string>
+    <string name="tc4_label_use_unix_socket_desc">Netzwerk-Stack umgehen, Ports sparen, Leistung verbessern</string>
     <string name="tc4_label_version">Version %1$s</string>
 
     <string name="tc4_container_title">Container-Verwaltung</string>

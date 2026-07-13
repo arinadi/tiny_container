@@ -23,6 +23,8 @@
     <string name="tc4_label_adapt_screen">Adapt to Screen Size</string>
     <string name="tc4_label_effective_next_launch">Takes effect on next container launch</string>
     <string name="tc4_label_effective_this_session">Takes effect this session only. Must disable before exiting.</string>
+    <string name="tc4_label_use_unix_socket">Receive VNC via Unix Socket</string>
+    <string name="tc4_label_use_unix_socket_desc">Bypass network stack, save ports, improve performance</string>
     <string name="tc4_label_version">Version %1$s</string>
 
     <!-- ==================== Container Management ==================== -->

@@ -19,6 +19,8 @@
     <string name="tc4_label_adapt_screen">Aanpassen aan schermgrootte</string>
     <string name="tc4_label_effective_next_launch">Wordt van kracht bij volgende containerstart</string>
     <string name="tc4_label_effective_this_session">Alleen deze sessie van kracht. Moet voor afsluiten worden uitgeschakeld.</string>
+    <string name="tc4_label_use_unix_socket">VNC ontvangen via Unix-socket</string>
+    <string name="tc4_label_use_unix_socket_desc">Netwerkstack omzeilen, poorten besparen, prestaties verbeteren</string>
     <string name="tc4_label_version">Versie %1$s</string>
     <string name="tc4_container_title">Containerbeheer</string>
     <string name="tc4_container_empty_hint">Geen containers, tik rechtsboven om te importeren</string>

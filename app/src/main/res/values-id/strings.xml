@@ -21,6 +21,8 @@
     <string name="tc4_label_adapt_screen">Sesuaikan dengan Ukuran Layar</string>
     <string name="tc4_label_effective_next_launch">Berlaku pada peluncuran kontainer berikutnya</string>
     <string name="tc4_label_effective_this_session">Hanya berlaku sesi ini. Harus dinonaktifkan sebelum keluar.</string>
+    <string name="tc4_label_use_unix_socket">Terima VNC melalui soket Unix</string>
+    <string name="tc4_label_use_unix_socket_desc">Melewati tumpukan jaringan, menghemat port, meningkatkan kinerja</string>
     <string name="tc4_label_version">Versi %1$s</string>
 
     <string name="tc4_container_title">Manajemen Kontainer</string>

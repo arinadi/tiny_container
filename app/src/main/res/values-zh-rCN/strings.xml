@@ -23,6 +23,8 @@
     <string name="tc4_label_adapt_screen">自适应屏幕尺寸</string>
     <string name="tc4_label_effective_next_launch">下次启动容器时生效</string>
     <string name="tc4_label_effective_this_session">仅此次生效。须在退出容器前关闭</string>
+    <string name="tc4_label_use_unix_socket">从 Unix 套接字接收 VNC</string>
+    <string name="tc4_label_use_unix_socket_desc">绕过网络栈，节省端口，提升性能</string>
     <string name="tc4_label_version">版本 %1$s</string>
 
     <!-- ==================== Container Management ==================== -->

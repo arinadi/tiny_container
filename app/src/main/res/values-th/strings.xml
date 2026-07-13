@@ -19,6 +19,8 @@
     <string name="tc4_label_adapt_screen">ปรับตามขนาดหน้าจอ</string>
     <string name="tc4_label_effective_next_launch">มีผลในการเปิดคอนเทนเนอร์ครั้งถัดไป</string>
     <string name="tc4_label_effective_this_session">มีผลเฉพาะเซสชันนี้ ต้องปิดก่อนออก</string>
+    <string name="tc4_label_use_unix_socket">รับ VNC ผ่าน Unix socket</string>
+    <string name="tc4_label_use_unix_socket_desc">เลี่ยงเน็ตเวิร์กสแต็ก ประหยัดพอร์ต เพิ่มประสิทธิภาพ</string>
     <string name="tc4_label_version">เวอร์ชัน %1$s</string>
     <string name="tc4_container_title">การจัดการคอนเทนเนอร์</string>
     <string name="tc4_container_empty_hint">ไม่มีคอนเทนเนอร์ แตะขวาบนเพื่อนำเข้า</string>

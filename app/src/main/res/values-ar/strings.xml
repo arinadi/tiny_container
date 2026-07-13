@@ -24,6 +24,8 @@
     <string name="tc4_label_adapt_screen">التكيف مع حجم الشاشة</string>
     <string name="tc4_label_effective_next_launch">يسري عند تشغيل الحاوية التالي</string>
     <string name="tc4_label_effective_this_session">يسري لهذه الجلسة فقط. يجب التعطيل قبل الخروج.</string>
+    <string name="tc4_label_use_unix_socket">استقبال VNC عبر مقبس Unix</string>
+    <string name="tc4_label_use_unix_socket_desc">تجاوز مكدس الشبكة، توفير المنافذ، تحسين الأداء</string>
     <string name="tc4_label_version">الإصدار %1$s</string>
 
     <!-- ==================== Container Management ==================== -->

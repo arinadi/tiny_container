@@ -55,7 +55,8 @@ sealed interface GuiNavigationEvent {
     data class OpenAvnc(
         val link: String,
         val adaptToScreenSize: Boolean,
-        val scaleRatio: Double
+        val scaleRatio: Double,
+        val useUnixSocket: Boolean
     ) : GuiNavigationEvent
     data object OpenX11 : GuiNavigationEvent
 }
@@ -158,7 +159,8 @@ class ContainerMainViewModel(
                         val link = feature["link"] as? String ?: return@launch
                         val adaptToScreenSize = feature["adapt_to_screen_size"] as? Boolean ?: return@launch
                         val scaleRatio = (feature["scale_ratio"] as? Number)?.toDouble() ?: return@launch
-                        _navigationEvents.tryEmit(GuiNavigationEvent.OpenAvnc(link, adaptToScreenSize, scaleRatio))
+                        val useUnixSocket = feature["use_unix_socket"] as? Boolean ?: true
+                        _navigationEvents.tryEmit(GuiNavigationEvent.OpenAvnc(link, adaptToScreenSize, scaleRatio, useUnixSocket))
                     }
                     "x11" -> {
                         _navigationEvents.tryEmit(GuiNavigationEvent.OpenX11)
@@ -263,11 +265,19 @@ class ContainerMainViewModel(
                     val command = feature["command"] as? String ?: return
                     val adaptToScreenSize = feature["adapt_to_screen_size"] as? Boolean ?: return
                     val scaleRatio = (feature["scale_ratio"] as? Number)?.toDouble() ?: return
+                    val useUnixSocket = feature["use_unix_socket"] as? Boolean ?: true
                     Global.sendCommand(command)
-                    if (!waitForFile("${getApplication<Application>().cacheDir}/tmp/.tiny.vnc")) {
-                        return
+                    if (useUnixSocket) {
+                        if (!waitForFile("${getApplication<Application>().cacheDir}/tmp/.tiny.vnc")) {
+                            return
+                        }
+                    } else {
+                        val port = extractPort(link)
+                        if (port != null && !waitForPort(port)) {
+                            return
+                        }
                     }
-                    _navigationEvents.tryEmit(GuiNavigationEvent.OpenAvnc(link, adaptToScreenSize, scaleRatio))
+                    _navigationEvents.tryEmit(GuiNavigationEvent.OpenAvnc(link, adaptToScreenSize, scaleRatio, useUnixSocket))
                 }
                 "x11" -> {
                     if (!Global.autoLaunchGui) continue

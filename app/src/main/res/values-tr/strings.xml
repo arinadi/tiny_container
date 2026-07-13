@@ -19,6 +19,8 @@
     <string name="tc4_label_adapt_screen">Ekran Boyutuna Uyarla</string>
     <string name="tc4_label_effective_next_launch">Sonraki konteyner başlatmada etkin olur</string>
     <string name="tc4_label_effective_this_session">Yalnızca bu oturum için geçerli. Çıkmadan önce devre dışı bırakılmalı.</string>
+    <string name="tc4_label_use_unix_socket">VNC\'yi Unix soketi üzerinden al</string>
+    <string name="tc4_label_use_unix_socket_desc">Ağ yığınını atla, portları koru, performansı artır</string>
     <string name="tc4_label_version">Sürüm %1$s</string>
     <string name="tc4_container_title">Konteyner Yönetimi</string>
     <string name="tc4_container_empty_hint">Konteyner yok, içe aktarmak için sağ üste dokunun</string>

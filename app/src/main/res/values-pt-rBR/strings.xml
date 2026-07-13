@@ -19,6 +19,8 @@
     <string name="tc4_label_adapt_screen">Adaptar ao Tamanho da Tela</string>
     <string name="tc4_label_effective_next_launch">Entra em vigor na próxima inicialização do contêiner</string>
     <string name="tc4_label_effective_this_session">Válido apenas para esta sessão. Deve ser desativado antes de sair.</string>
+    <string name="tc4_label_use_unix_socket">Receber VNC via socket Unix</string>
+    <string name="tc4_label_use_unix_socket_desc">Ignorar a pilha de rede, economizar portas, melhorar o desempenho</string>
     <string name="tc4_label_version">Versão %1$s</string>
     <string name="tc4_container_title">Gerenciamento de Contêineres</string>
     <string name="tc4_container_empty_hint">Sem contêineres, toque no canto superior direito para importar</string>

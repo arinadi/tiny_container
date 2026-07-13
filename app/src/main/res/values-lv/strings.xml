@@ -20,6 +20,8 @@
     <string name="tc4_label_adapt_screen">Pielāgot ekrāna izmēram</string>
     <string name="tc4_label_effective_next_launch">Stāsies spēkā nākamajā konteinera palaišanas reizē</string>
     <string name="tc4_label_effective_this_session">Spēkā tikai šajā sesijā. Pirms iziešanas jāatspējo.</string>
+    <string name="tc4_label_use_unix_socket">Saņemt VNC caur Unix ligzdu</string>
+    <string name="tc4_label_use_unix_socket_desc">Apiet tīkla steku, ietaupīt portus, uzlabot veiktspēju</string>
     <string name="tc4_label_version">Versija %1$s</string>
     <string name="tc4_container_title">Konteinera pārvaldība</string>
     <string name="tc4_container_empty_hint">Nav konteineru, pieskarieties augšējā labajā stūrī, lai importētu</string>
