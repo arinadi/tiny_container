@@ -137,6 +137,7 @@ class ContainerMainViewModel(
         TinyStorage.stop()
         Global.newSession()
         Global.setupEnvironment()
+        Global.sendCommand("rm ${getApplication<Application>().cacheDir}/boot_${code}.sh")
         val merged = collectEnabledOptions()
         for (cmd in merged.postEndHostCommands) {
             Global.sendCommand(cmd)
@@ -218,8 +219,8 @@ class ContainerMainViewModel(
 
         // 写入临时脚本文件，绕过 PTY 单行 4096 字节限制
         val bootScript = File("${getApplication<Application>().cacheDir}/boot_${code}.sh")
-        bootScript.writeText(resolvedBootCmd)
-        Global.sendCommand("source ${bootScript.absolutePath} && rm ${bootScript.absolutePath}")
+        bootScript.writeText("exec $resolvedBootCmd")
+        Global.sendCommand("source ${bootScript.absolutePath}")
 
         for (cmd in merged.postStartContainerCommands) {
             Global.sendCommand(cmd)
