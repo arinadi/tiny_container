@@ -477,7 +477,7 @@ private class ContainerCardViewHolder(
                 binding.name.text = displayName
                 binding.description.text = item.description.ifEmpty { item.code }
                 binding.space.text = if (item.spaceBytes == null)
-                    itemView.context.getString(R.string.tc4_container_calculating_space)
+                    "${item.code} - ${itemView.context.getString(R.string.tc4_container_calculating_space)}"
                 else "${item.code} - ${formatBytes(item.spaceBytes)}"
 
                 // 加载预览图
@@ -530,7 +530,7 @@ private class ContainerCardViewHolder(
         }
         if ("space" in changes) {
             binding.space.text = if (loaded.spaceBytes == null)
-                itemView.context.getString(R.string.tc4_container_calculating_space)
+                "${item.code} - ${itemView.context.getString(R.string.tc4_container_calculating_space)}"
             else "${loaded.code} - ${formatBytes(loaded.spaceBytes)}"
         }
         // space 单独更新时不重新加载图片，避免闪烁
