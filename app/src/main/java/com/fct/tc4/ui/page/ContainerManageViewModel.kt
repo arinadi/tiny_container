@@ -601,6 +601,7 @@ class ContainerManageViewModel(application: Application) : AndroidViewModel(appl
     /** 在 terminal session 中执行命令，等待 session 结束后返回 exitCode */
     private suspend fun execShell(block: () -> Unit): Int = withContext(Dispatchers.Main) {
         suspendCancellableCoroutine { cont ->
+            Global.terminalSession?.finishIfRunning()
             Global.newSession(onFinished = { exitCode ->
                 cont.resume(exitCode)
             })

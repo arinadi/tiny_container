@@ -151,6 +151,7 @@ object Global {
 
         ConfigManager.init(appContext)
 
+        terminalSession?.finishIfRunning()
         newSession()
         setNativeLibraryPath()
         cleanTmpFiles()
@@ -164,7 +165,6 @@ object Global {
         env: Array<String>? = null,
         onFinished: ((exitCode: Int) -> Unit)? = null
     ): TerminalSession {
-        terminalSession?.finishIfRunning()
         val callback = if (onFinished != null) {
             object : TerminalSession.SessionChangedCallback by defaultSessionCallback {
                 override fun onSessionFinished(finishedSession: TerminalSession?) {

@@ -19,6 +19,8 @@ package com.fct.tc4.ui.page
 
 import android.app.Application
 import android.content.Intent
+import android.system.Os
+import android.system.OsConstants
 import android.util.Log
 import com.termux.x11.CmdEntryPointService
 import androidx.lifecycle.AndroidViewModel
@@ -135,6 +137,10 @@ class ContainerMainViewModel(
         TinyMicrophone.stop()
         TinyIpp.stop()
         TinyStorage.stop()
+        val pid = Global.terminalSession?.pid ?: 0
+        if (pid > 0) {
+            Os.kill(-pid, OsConstants.SIGQUIT)
+        }
         Global.newSession()
         Global.setupEnvironment()
         Global.sendCommand("rm ${getApplication<Application>().cacheDir}/boot_${code}.sh")
@@ -173,6 +179,7 @@ class ContainerMainViewModel(
 
     private fun setupEnvironment() {
         val app = getApplication<Application>()
+        Global.terminalSession?.finishIfRunning()
         Global.newSession(onFinished = { exitCode ->
             if (exitCode == -9) {
                 Global.onSessionSignal9?.invoke()
