@@ -122,7 +122,7 @@ class ContainerMainViewModel(
             if (code == com.fct.tc4.ui.main.MainViewModel.pendingCommandCode) {
                 val cmd = com.fct.tc4.ui.main.MainViewModel.pendingCommandText
                 if (cmd != null) {
-                    delay(5000)
+                    delay(2000)
                     Global.sendCommand(cmd)
                 }
                 com.fct.tc4.ui.main.MainViewModel.clearPendingCommand()
@@ -256,55 +256,53 @@ class ContainerMainViewModel(
                 }
                 "webview" -> {
                     if (!Global.autoLaunchGui) continue
-                    val link = feature["link"] as? String ?: return
-                    val command = feature["command"] as? String ?: return
+                    val link = feature["link"] as? String ?: continue
+                    val command = feature["command"] as? String ?: continue
                     Global.sendCommand(command)
                     val port = extractPort(link)
                     Log.d(TAG, "webview: link=$link port=$port waiting for port...")
-                    if (port == null) return
+                    if (port == null) continue
                     if (!waitForPort(port)) {
                         Log.e(TAG, "webview: port=$port not ready, giving up")
-                        return
+                        continue
                     }
                     _navigationEvents.tryEmit(GuiNavigationEvent.OpenWebView(link))
                 }
                 "avnc" -> {
                     if (!Global.autoLaunchGui) continue
-                    val link = feature["link"] as? String ?: return
-                    val command = feature["command"] as? String ?: return
-                    val adaptToScreenSize = feature["adapt_to_screen_size"] as? Boolean ?: return
-                    val scaleRatio = (feature["scale_ratio"] as? Number)?.toDouble() ?: return
+                    val link = feature["link"] as? String ?: continue
+                    val command = feature["command"] as? String ?: continue
+                    val adaptToScreenSize = feature["adapt_to_screen_size"] as? Boolean ?: continue
+                    val scaleRatio = (feature["scale_ratio"] as? Number)?.toDouble() ?: continue
                     val useUnixSocket = feature["use_unix_socket"] as? Boolean ?: true
                     Global.sendCommand(command)
                     if (useUnixSocket) {
                         if (!waitForFile("${getApplication<Application>().cacheDir}/tmp/.tiny.vnc")) {
-                            return
+                            continue
                         }
                     } else {
                         val port = extractPort(link)
                         Log.d(TAG, "avnc: link=$link port=$port waiting for port...")
-                        if (port == null) return
+                        if (port == null) continue
                         if (!waitForPort(port)) {
                             Log.e(TAG, "avnc: port=$port not ready, giving up")
-                            return
+                            continue
                         }
                     }
                     _navigationEvents.tryEmit(GuiNavigationEvent.OpenAvnc(link, adaptToScreenSize, scaleRatio, useUnixSocket))
                 }
                 "x11" -> {
                     if (!Global.autoLaunchGui) continue
-                    val args = feature["args"] as? List<String> ?: return
-                    val command = feature["command"] as? String ?: return
+                    val args = feature["args"] as? List<String> ?: continue
+                    val command = feature["command"] as? String ?: continue
                     viewModelScope.launch {
                         launchXServer(args)
-                        viewModelScope.launch(Dispatchers.IO) {
-                            if (!waitForFile("${getApplication<Application>().cacheDir}/tmp/.X11-unix/X${extractDisplay(args)}")) {
-                                return@launch
-                            }
-                            Global.sendCommand(command)
-                            _navigationEvents.tryEmit(GuiNavigationEvent.OpenX11)
-                        }
                     }
+                    if (!waitForFile("${getApplication<Application>().cacheDir}/tmp/.X11-unix/X${extractDisplay(args)}")) {
+                        continue
+                    }
+                    Global.sendCommand(command)
+                    _navigationEvents.tryEmit(GuiNavigationEvent.OpenX11)
                 }
             }
         }
