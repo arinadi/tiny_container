@@ -260,10 +260,11 @@ class ContainerMainViewModel(
                     val command = feature["command"] as? String ?: return
                     Global.sendCommand(command)
                     val port = extractPort(link)
-                    if (port != null) {
-                        if (waitForPort(port)) {
-                            return
-                        }
+                    Log.d(TAG, "webview: link=$link port=$port waiting for port...")
+                    if (port == null) return
+                    if (!waitForPort(port)) {
+                        Log.e(TAG, "webview: port=$port not ready, giving up")
+                        return
                     }
                     _navigationEvents.tryEmit(GuiNavigationEvent.OpenWebView(link))
                 }
@@ -281,7 +282,10 @@ class ContainerMainViewModel(
                         }
                     } else {
                         val port = extractPort(link)
-                        if (port != null && !waitForPort(port)) {
+                        Log.d(TAG, "avnc: link=$link port=$port waiting for port...")
+                        if (port == null) return
+                        if (!waitForPort(port)) {
+                            Log.e(TAG, "avnc: port=$port not ready, giving up")
                             return
                         }
                     }
@@ -526,20 +530,20 @@ class ContainerMainViewModel(
     }
 
     private fun extractPort(link: String): Int? {
-        val portRegex = Regex(":(\\d+)/")
+        val portRegex = Regex(":(\\d+)(?:/|$)")
         return portRegex.find(link)?.groupValues?.get(1)?.toIntOrNull()
     }
 
-    private suspend fun waitForPort(port: Int, timeoutMs: Long = 60_000): Boolean {
-        withTimeoutOrNull(timeoutMs) {
+    private suspend fun waitForPort(port: Int, timeoutMs: Long = 15_000): Boolean {
+        return withTimeoutOrNull(timeoutMs) {
             while (true) {
                 if (checkTcpPort(port) || checkUdpPort(port)) {
                     return@withTimeoutOrNull true
                 }
                 delay(500)
             }
-        }
-        return false
+            return@withTimeoutOrNull false
+        } ?: false
     }
 
     private fun checkTcpPort(port: Int): Boolean {
@@ -560,7 +564,7 @@ class ContainerMainViewModel(
         }
     }
 
-    private suspend fun waitForFile(filePath: String, timeoutMs: Long = 60_000): Boolean {
+    private suspend fun waitForFile(filePath: String, timeoutMs: Long = 15_000): Boolean {
         val file = File(filePath)
         var timer = 0
         while (timeoutMs > timer) {
