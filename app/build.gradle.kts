@@ -29,8 +29,8 @@ android {
         applicationId = "com.fct.tc4"
         minSdk = 28
         targetSdk = 37
-        versionCode = 1
-        versionName = "4.0.0"
+        versionCode = 2
+        versionName = "4.2.0"
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
         ndk {
             abiFilters.add("arm64-v8a")
