@@ -49,6 +49,7 @@ import com.google.android.material.snackbar.Snackbar
 import com.termux.x11.CmdEntryPointService
 import java.io.File
 import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 
@@ -366,7 +367,10 @@ class MainActivity : AppCompatActivity() {
             is MainViewModel.Screen.ContainerMain -> {
                 if (screen.code == code) {
                     Global.sendCommand(command)
-                    (supportFragmentManager.findFragmentByTag("ContainerMain") as? ContainerMainFragment)?.onEnterGui()
+                    lifecycleScope.launch {
+                        delay(32)
+                        (supportFragmentManager.findFragmentByTag("ContainerMain") as? ContainerMainFragment)?.onEnterGui()
+                    }
                 } else {
                     Snackbar.make(binding.root, R.string.tc4_shortcut_another_running, Snackbar.LENGTH_SHORT).show()
                 }
