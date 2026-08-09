@@ -40,6 +40,10 @@ import java.io.FileInputStream
  * receives print jobs from inside the Linux container, and submits
  * them to the Android Print framework.
  *
+ * Job template attributes selected in the container (paper size,
+ * orientation, duplex, color mode, resolution) are forwarded and
+ * pre-selected in the Android print dialog via [PrintAttributes].
+ *
  * Usage:
  *   TinyIpp.start()   // create socket & listen (retries for 60 s)
  *   TinyIpp.stop()    // stop listening
@@ -76,21 +80,65 @@ object TinyIpp {
     @JvmStatic
     private external fun nativeStop()
 
+    @JvmStatic
+    external fun nativeJobFinished(jobId: Int)
+
     /* ---------- called from JNI (any thread) ---------- */
 
     /**
      * Called by native code after receiving a complete print job.
      * Schedules a [PrintManager.print] call on the main thread which
      * shows the system print dialog for user confirmation.
+     *
+     * @param mediaWidthHm/mediaHeightHm  media size in hundredths of a mm (0 = unknown)
+     * @param orientation  IPP orientation-requested (3=portrait 4=landscape
+     *                     5=reverse-landscape 6=reverse-portrait, 0 = unknown)
+     * @param resXDpi/resYDpi  printer resolution in dpi (0 = unknown)
      */
     @JvmStatic
-    fun onPrintJob(jobName: String, tempFilePath: String, documentFormat: String) {
-        android.util.Log.i(TAG, "JNI upcall received: name=$jobName fmt=$documentFormat file=$tempFilePath")
-        mainHandler.post { submitToPrintManager(jobName, tempFilePath, documentFormat) }
+    fun onPrintJob(
+        jobId: Int,
+        jobName: String,
+        tempFilePath: String,
+        documentFormat: String,
+        copies: Int,
+        media: String,
+        mediaWidthHm: Int,
+        mediaHeightHm: Int,
+        orientation: Int,
+        sides: String,
+        colorMode: String,
+        resXDpi: Int,
+        resYDpi: Int
+    ) {
+        android.util.Log.i(
+            TAG,
+            "JNI upcall: job=$jobId name=$jobName fmt=$documentFormat copies=$copies " +
+                "media=$media(${mediaWidthHm}x${mediaHeightHm}) orient=$orientation " +
+                "sides=$sides color=$colorMode res=${resXDpi}x${resYDpi} file=$tempFilePath"
+        )
+        mainHandler.post {
+            submitToPrintManager(
+                jobId, jobName, tempFilePath, documentFormat,
+                media, mediaWidthHm, mediaHeightHm, orientation, sides, colorMode, resXDpi, resYDpi
+            )
+        }
     }
 
-    private fun submitToPrintManager(jobName: String, tempFilePath: String, documentFormat: String) {
-        android.util.Log.i(TAG, "submitToPrintManager: activity=${currentActivity?.javaClass?.simpleName}")
+    private fun submitToPrintManager(
+        jobId: Int,
+        jobName: String,
+        tempFilePath: String,
+        documentFormat: String,
+        media: String,
+        mediaWidthHm: Int,
+        mediaHeightHm: Int,
+        orientation: Int,
+        sides: String,
+        colorMode: String,
+        resXDpi: Int,
+        resYDpi: Int
+    ) {
         val ctx = currentActivity ?: run {
             android.util.Log.e(TAG, "No foreground activity, cannot show print dialog")
             return
@@ -99,23 +147,97 @@ object TinyIpp {
 
         if (!file.isFile || file.length() == 0L) {
             android.util.Log.e(TAG, "Print job file missing or empty: $tempFilePath")
+            nativeJobFinished(jobId)
             return
         }
 
         val printManager = ctx.getSystemService(Context.PRINT_SERVICE) as? PrintManager
         if (printManager == null) {
             android.util.Log.e(TAG, "PrintManager not available")
+            nativeJobFinished(jobId)
             return
         }
 
         val displayName = jobName.ifBlank { "Print Job" }
-        val adapter = IppPrintAdapter(displayName, file)
+        val adapter = IppPrintAdapter(jobId, displayName, file)
+        val attrs = buildPrintAttributes(
+            media, mediaWidthHm, mediaHeightHm, orientation, sides, colorMode, resXDpi, resYDpi
+        )
 
         try {
-            printManager.print(displayName, adapter, PrintAttributes.Builder().build())
+            printManager.print(displayName, adapter, attrs)
             android.util.Log.i(TAG, "Print submitted: $displayName (${file.length()} B, $documentFormat)")
         } catch (e: Exception) {
             android.util.Log.e(TAG, "Print submit failed: ${e.message}")
+            nativeJobFinished(jobId)
+        }
+    }
+
+    /* ---------- IPP → Android attribute mapping ---------- */
+
+    private fun buildPrintAttributes(
+        media: String,
+        mediaWidthHm: Int,
+        mediaHeightHm: Int,
+        orientation: Int,
+        sides: String,
+        colorMode: String,
+        resXDpi: Int,
+        resYDpi: Int
+    ): PrintAttributes {
+        val builder = PrintAttributes.Builder()
+            .setMediaSize(resolveMediaSize(media, mediaWidthHm, mediaHeightHm, orientation))
+            .setColorMode(
+                if (colorMode.equals("monochrome", true) || colorMode.equals("bi-level", true))
+                    PrintAttributes.COLOR_MODE_MONOCHROME
+                else
+                    PrintAttributes.COLOR_MODE_COLOR
+            )
+            .setDuplexMode(
+                when (sides) {
+                    "two-sided-long-edge" -> PrintAttributes.DUPLEX_MODE_LONG_EDGE
+                    "two-sided-short-edge" -> PrintAttributes.DUPLEX_MODE_SHORT_EDGE
+                    else -> PrintAttributes.DUPLEX_MODE_NONE
+                }
+            )
+        if (resXDpi > 0 && resYDpi > 0) {
+            builder.setResolution(PrintAttributes.Resolution("ipp", "IPP", resXDpi, resYDpi))
+        }
+        return builder.build()
+    }
+
+    private fun resolveMediaSize(
+        media: String,
+        mediaWidthHm: Int,
+        mediaHeightHm: Int,
+        orientation: Int
+    ): PrintAttributes.MediaSize {
+        var size: PrintAttributes.MediaSize? = when (media) {
+            "iso_a4_210x297mm" -> PrintAttributes.MediaSize.ISO_A4
+            "iso_a5_148x210mm" -> PrintAttributes.MediaSize.ISO_A5
+            "iso_a3_297x420mm" -> PrintAttributes.MediaSize.ISO_A3
+            "iso_b5_176x250mm" -> PrintAttributes.MediaSize.ISO_B5
+            "na_letter_8.5x11in" -> PrintAttributes.MediaSize.NA_LETTER
+            "na_legal_8.5x14in" -> PrintAttributes.MediaSize.NA_LEGAL
+            "na_index-4x6_4x6in" -> PrintAttributes.MediaSize.NA_INDEX_4X6
+            else -> null
+        }
+        if (size == null && mediaWidthHm > 0 && mediaHeightHm > 0) {
+            // hundredths of a mm → thousandths of an inch (1 mil = 2.54 hm)
+            val wMils = (mediaWidthHm * 100 + 127) / 254
+            val hMils = (mediaHeightHm * 100 + 127) / 254
+            size = PrintAttributes.MediaSize(
+                "ipp_${mediaWidthHm}x$mediaHeightHm",
+                "${mediaWidthHm / 100.0} x ${mediaHeightHm / 100.0} mm",
+                wMils, hMils
+            )
+        }
+        if (size == null) size = PrintAttributes.MediaSize.ISO_A4
+
+        return when (orientation) {
+            4, 5 -> size.asLandscape()
+            3, 6 -> size.asPortrait()
+            else -> size
         }
     }
 
@@ -196,6 +318,7 @@ object TinyIpp {
  * Android print system.
  */
 private class IppPrintAdapter(
+    private val jobId: Int,
     private val jobName: String,
     private val file: File
 ) : PrintDocumentAdapter() {
@@ -205,7 +328,7 @@ private class IppPrintAdapter(
         newAttributes: PrintAttributes?,
         cancellationSignal: CancellationSignal?,
         callback: LayoutResultCallback,
-        extras: android.os.Bundle?
+        extras: Bundle?
     ) {
         if (cancellationSignal?.isCanceled == true) {
             callback.onLayoutCancelled()
@@ -246,7 +369,11 @@ private class IppPrintAdapter(
     }
 
     override fun onFinish() {
-        // Clean up the temp file after printing is done
-        file.delete()
+        // Notify native code (marks the job completed & removes the spool file)
+        try {
+            TinyIpp.nativeJobFinished(jobId)
+        } catch (e: Exception) {
+            android.util.Log.e("TinyIpp", "nativeJobFinished failed: ${e.message}")
+        }
     }
 }
