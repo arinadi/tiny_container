@@ -188,7 +188,7 @@ object Global {
 
     fun setupEnvironment(){
         listOf("tmp", "run", "proot_tmp").forEach { dir ->
-            File(appContext.cacheDir, dir).apply {
+            File(appContext.filesDir, dir).apply {
                 if (exists()) deleteRecursively()
                 mkdirs()
             }
@@ -196,7 +196,7 @@ object Global {
         sendCommand($$"""
             export BIN_DIR=$${appContext.filesDir.absolutePath}/bootstrap/bin
             export PUBLIC_DIR=$${appContext.filesDir.absolutePath}/public
-            export CACHE_DIR=$${appContext.cacheDir.absolutePath}
+            export CACHE_DIR=$${appContext.filesDir.absolutePath}
             export PATH=$BIN_DIR:$PATH
             export LD_LIBRARY_PATH=$${appContext.filesDir.absolutePath}/bootstrap/lib:$LD_LIBRARY_PATH
             export PROOT_LOADER=$${appContext.filesDir.absolutePath}/applib/libproot-loader-aarch64-5.1.107-68.so
@@ -223,7 +223,7 @@ object Global {
     }
 
     fun cleanTmpFiles() {
-        sendCommand("rm -rf ${appContext.cacheDir.absolutePath}/proot_tmp")
+        sendCommand("rm -rf ${appContext.filesDir.absolutePath}/proot_tmp")
     }
 
     fun setupBootstrapIfRequired() {

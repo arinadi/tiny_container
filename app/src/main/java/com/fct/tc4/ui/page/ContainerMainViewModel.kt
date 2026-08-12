@@ -143,7 +143,7 @@ class ContainerMainViewModel(
         }
         Global.newSession()
         Global.setupEnvironment()
-        Global.sendCommand("rm ${getApplication<Application>().cacheDir}/boot_${code}.sh")
+        Global.sendCommand("rm ${getApplication<Application>().filesDir}/boot_${code}.sh")
         val merged = collectEnabledOptions()
         for (cmd in merged.postEndHostCommands) {
             Global.sendCommand(cmd)
@@ -225,7 +225,7 @@ class ContainerMainViewModel(
             .replace("\$EXTRA_ENV", merged.env.joinToString(" "))
 
         // 写入临时脚本文件，绕过 PTY 单行 4096 字节限制
-        val bootScript = File("${getApplication<Application>().cacheDir}/boot_${code}.sh")
+        val bootScript = File("${getApplication<Application>().filesDir}/boot_${code}.sh")
         bootScript.writeText("exec $resolvedBootCmd")
         Global.sendCommand("source ${bootScript.absolutePath}")
 
@@ -277,7 +277,7 @@ class ContainerMainViewModel(
                     val useUnixSocket = feature["use_unix_socket"] as? Boolean ?: true
                     Global.sendCommand(command)
                     if (useUnixSocket) {
-                        if (!waitForFile("${getApplication<Application>().cacheDir}/tmp/.tiny.vnc")) {
+                        if (!waitForFile("${getApplication<Application>().filesDir}/tmp/.tiny.vnc")) {
                             continue
                         }
                     } else {
@@ -298,7 +298,7 @@ class ContainerMainViewModel(
                     viewModelScope.launch {
                         launchXServer(args)
                     }
-                    if (!waitForFile("${getApplication<Application>().cacheDir}/tmp/.X11-unix/X${extractDisplay(args)}")) {
+                    if (!waitForFile("${getApplication<Application>().filesDir}/tmp/.X11-unix/X${extractDisplay(args)}")) {
                         continue
                     }
                     Global.sendCommand(command)
@@ -316,7 +316,7 @@ class ContainerMainViewModel(
             "TERMUX_X11_DEBUG", "TERMUX_X11_OVERRIDE_PACKAGE"
         )
         val envVals = arrayOf(
-            "${app.cacheDir.absolutePath}/tmp",
+            "${app.filesDir.absolutePath}/tmp",
             "${app.dataDir.absolutePath}/$code/usr/share/X11/xkb",
             "1",
             app.packageName
@@ -359,7 +359,7 @@ class ContainerMainViewModel(
     private fun collectLstatCacheArgs(): List<String> {
         val features = config["feature"] as? List<Map<String, Any>> ?: return emptyList()
         val app = getApplication<Application>()
-        val cacheDir = app.cacheDir.absolutePath
+        val cacheDir = app.filesDir.absolutePath
         val containerDir = "${app.dataDir.absolutePath}/$code"
 
         val result = mutableListOf<String>()

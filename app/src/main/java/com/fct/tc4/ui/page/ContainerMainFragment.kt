@@ -137,7 +137,7 @@ class ContainerMainFragment : Fragment() {
                         is GuiNavigationEvent.OpenAvnc -> {
                             val uriBuilder = event.link.toUri().buildUpon()
                             if (event.useUnixSocket) {
-                                uriBuilder.appendQueryParameter("UnixSocket", "${requireContext().cacheDir.absolutePath}/tmp/.tiny.vnc")
+                                uriBuilder.appendQueryParameter("UnixSocket", "${requireContext().filesDir.absolutePath}/tmp/.tiny.vnc")
                             }
                             val uri = uriBuilder.build()
                             val profile = VncUri(uri.toString()).toServerProfile().apply {

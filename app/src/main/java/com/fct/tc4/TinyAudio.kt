@@ -60,7 +60,7 @@ object TinyAudio {
         if (running) return
         running = true
 
-        val socketPath = File(Global.appContext.cacheDir, "tmp/.tiny.audio").absolutePath
+        val socketPath = File(Global.appContext.filesDir, "tmp/.tiny.audio").absolutePath
 
         workerThread = Thread({
             var success = false

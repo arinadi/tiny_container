@@ -68,7 +68,7 @@ object TinyStorage {
         if (running) return
         running = true
 
-        val socketPath = File(Global.appContext.cacheDir, "proot_tmp/.tiny.storage").absolutePath
+        val socketPath = File(Global.appContext.filesDir, "proot_tmp/.tiny.storage").absolutePath
 
         workerThread = Thread({
             var success = false

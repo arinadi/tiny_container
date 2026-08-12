@@ -358,7 +358,7 @@ class ContainerManageViewModel(application: Application) : AndroidViewModel(appl
             _installState.value = InstallState.CopyingToCache
             val app = getApplication<Application>()
             try {
-                val cacheFile = File(app.cacheDir, "rootfs.tar.zst")
+                val cacheFile = File(app.filesDir, "rootfs.tar.zst")
                 app.contentResolver.openInputStream(uri)?.use { input ->
                     cacheFile.outputStream().use { output ->
                         input.copyTo(output, bufferSize = 8192)
@@ -380,7 +380,7 @@ class ContainerManageViewModel(application: Application) : AndroidViewModel(appl
             _installState.value = InstallState.CopyingToCache
             val app = getApplication<Application>()
             try {
-                val cacheFile = File(app.cacheDir, "rootfs.tar.zst")
+                val cacheFile = File(app.filesDir, "rootfs.tar.zst")
                 app.assets.open("rootfs.tar.zst").use { input ->
                     cacheFile.outputStream().use { output ->
                         input.copyTo(output, bufferSize = 8192)
@@ -401,7 +401,7 @@ class ContainerManageViewModel(application: Application) : AndroidViewModel(appl
         viewModelScope.launch(Dispatchers.IO) {
             val app = getApplication<Application>()
             try {
-                val cacheFile = File(app.cacheDir, "rootfs.tar.zst")
+                val cacheFile = File(app.filesDir, "rootfs.tar.zst")
 
                 // 从 assets 复制到缓存
                 _installState.value = InstallState.CopyingToCache
@@ -465,7 +465,7 @@ class ContainerManageViewModel(application: Application) : AndroidViewModel(appl
     /** 从已复制到 cache 的 rootfs.tar.zst 中提取配置，进入等待确认状态 */
     private suspend fun processCachedRootfs() {
         val config = extractAndParseConfig() ?: return
-        val cacheFile = File(getApplication<Application>().cacheDir, "rootfs.tar.zst")
+        val cacheFile = File(getApplication<Application>().filesDir, "rootfs.tar.zst")
         val code = config["code"] as? String ?: ""
         if (code.isBlank()) {
             cleanCacheFiles()
@@ -490,7 +490,7 @@ class ContainerManageViewModel(application: Application) : AndroidViewModel(appl
             Global.sendCommand("exit")
         }
 
-        val configFile = File(app.cacheDir, ".tiny.yaml")
+        val configFile = File(app.filesDir, ".tiny.yaml")
         if (!configFile.exists()) {
             cleanCacheFiles()
             _installState.value = InstallState.Failed(app.getString(R.string.tc4_import_no_config))
@@ -511,7 +511,7 @@ class ContainerManageViewModel(application: Application) : AndroidViewModel(appl
     /** 执行实际的容器安装操作（解压 rootfs、修复权限、保存配置），调用方负责状态管理 */
     private suspend fun performInstall(code: String, rawConfig: Map<String, Any>) {
         val app = getApplication<Application>()
-        val cacheFile = File(app.cacheDir, "rootfs.tar.zst")
+        val cacheFile = File(app.filesDir, "rootfs.tar.zst")
 
         _installState.value = InstallState.Installing(
             code = code,
@@ -583,8 +583,8 @@ class ContainerManageViewModel(application: Application) : AndroidViewModel(appl
     }
 
     fun cleanCacheFiles() {
-        File(getApplication<Application>().cacheDir, "rootfs.tar.zst").delete()
-        File(getApplication<Application>().cacheDir, ".tiny.yaml").delete()
+        File(getApplication<Application>().filesDir, "rootfs.tar.zst").delete()
+        File(getApplication<Application>().filesDir, ".tiny.yaml").delete()
     }
 
     fun resetInstallState() {

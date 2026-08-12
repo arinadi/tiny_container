@@ -258,7 +258,7 @@ object TinyIpp {
 
         (Global.appContext as Application).registerActivityLifecycleCallbacks(lifecycleCallbacks)
 
-        val dir = File(Global.appContext.cacheDir, "run/cups")
+        val dir = File(Global.appContext.filesDir, "run/cups")
         dir.mkdirs()
         File(dir, "jobs").mkdirs()
 
