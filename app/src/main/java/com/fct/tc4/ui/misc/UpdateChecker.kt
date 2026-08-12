@@ -45,7 +45,7 @@ object UpdateChecker {
             val tagName = json.getString("tag_name")
             val latestVersion = tagName.removePrefix("v")
 
-            if (latestVersion != currentVersion) {
+            if (compareVersions(latestVersion, currentVersion) > 0) {
                 Log.i(TAG, "New version available: $latestVersion (current: $currentVersion)")
                 UpdateResult.NewVersion(latestVersion)
             } else {
@@ -75,5 +75,22 @@ object UpdateChecker {
         } finally {
             connection.disconnect()
         }
+    }
+
+    /**
+     * 按 "X.Y.Z..." 逐段数值比较版本号大小。
+     * 返回 > 0 表示 latest 更新，== 0 相同，< 0 更旧。
+     * 版本号非纯数字时抛 NumberFormatException，由调用方兜底为 CheckFailed。
+     */
+    private fun compareVersions(latest: String, current: String): Int {
+        val a = latest.split('-')[0].split('.').map { it.toInt() }
+        val b = current.split('-')[0].split('.').map { it.toInt() }
+        val len = maxOf(a.size, b.size)
+        for (i in 0 until len) {
+            val x = a.getOrNull(i) ?: 0
+            val y = b.getOrNull(i) ?: 0
+            if (x != y) return x.compareTo(y)
+        }
+        return 0
     }
 }
