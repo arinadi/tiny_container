@@ -8,7 +8,11 @@
 .externalNativeBuild
 .cxx
 local.properties
-app/src/main/jniLibs
+# jniLibs intentionally tracked on this fork (nanodesk-keepalive-fix) — the
+# upstream repo excludes it, which meant a build from this public source had
+# no working tar/zstd/proot/busybox at all (every bootstrap symlink pointed
+# at a missing file). Populated from the official v4.2.3-alpha1 release APK's
+# own lib/arm64-v8a/*.so, same GPLv3 project, personal-fork use only.
 app/src/main/assets/rootfs.tar.zst
 
 # Built application files
