@@ -23,6 +23,7 @@ import android.system.Os
 import android.system.OsConstants
 import android.util.Log
 import com.termux.x11.CmdEntryPointService
+import androidx.core.content.ContextCompat
 import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
@@ -33,6 +34,7 @@ import com.fct.tc4.R
 import com.fct.tc4.TinyIpp
 import com.fct.tc4.TinyStorage
 import com.fct.tc4.ui.misc.ConfigManager
+import com.fct.tc4.ui.misc.ContainerKeepAliveService
 import com.fct.tc4.ui.misc.Global
 import com.fct.tc4.ui.misc.UpdateChecker
 import com.fct.tc4.ui.misc.UpdateResult
@@ -132,6 +134,7 @@ class ContainerMainViewModel(
 
     fun exitContainer() {
         Global.onSessionSignal9 = null // 主动退出，不触发 signal 9 跳转
+        stopKeepAlive()
         killXServer()
         TinyAudio.stop()
         TinyMicrophone.stop()
@@ -202,6 +205,7 @@ class ContainerMainViewModel(
 
     @Suppress("UNCHECKED_CAST")
     private suspend fun launchContainer() {
+        startKeepAlive()
 
         val merged = collectEnabledOptions()
         // 处理 lstat-cache feature：解析路径，生成 --assured-path= 参数
@@ -306,6 +310,20 @@ class ContainerMainViewModel(
                 }
             }
         }
+    }
+
+    // Foreground service + wake lock so the container's process survives the
+    // screen turning off (nanodesk-keepalive-fix) — started as soon as the
+    // container is launched, stopped alongside the rest of exitContainer()'s
+    // teardown. Mirrors the launchXServer()/killXServer() pattern below.
+    private fun startKeepAlive() {
+        val app = getApplication<Application>()
+        ContextCompat.startForegroundService(app, Intent(app, ContainerKeepAliveService::class.java))
+    }
+
+    private fun stopKeepAlive() {
+        val app = getApplication<Application>()
+        app.stopService(Intent(app, ContainerKeepAliveService::class.java))
     }
 
     private fun launchXServer(xserverArgs: List<String>) {

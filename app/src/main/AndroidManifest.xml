@@ -9,6 +9,15 @@
     <uses-permission android:name="android.permission.MANAGE_EXTERNAL_STORAGE"
         tools:ignore="ScopedStorage" />
     <uses-permission android:name="android.permission.REQUEST_IGNORE_BATTERY_OPTIMIZATIONS" />
+    <!-- Keeps the container's proot process alive with the screen off (nanodesk-keepalive-fix):
+         a foreground service + wake lock, same mechanism Termux itself uses for its own
+         sessions. Without these the app process (and everything under it) is a normal
+         background process to Android and gets reclaimed a few minutes after the screen
+         turns off, regardless of the battery-optimization exemption. -->
+    <uses-permission android:name="android.permission.FOREGROUND_SERVICE" />
+    <uses-permission android:name="android.permission.FOREGROUND_SERVICE_SPECIAL_USE" />
+    <uses-permission android:name="android.permission.WAKE_LOCK" />
+    <uses-permission android:name="android.permission.POST_NOTIFICATIONS" />
 
     <application
         android:name=".Tc4Application"
@@ -63,6 +72,15 @@
         <activity
             android:name=".ui.page.LicenseActivity"
             android:exported="false" />
+
+        <service
+            android:name=".ui.misc.ContainerKeepAliveService"
+            android:exported="false"
+            android:foregroundServiceType="specialUse">
+            <property
+                android:name="android.app.PROPERTY_SPECIAL_USE_FGS_SUBTYPE"
+                android:value="Keeps the running Linux container process alive while the screen is off" />
+        </service>
 
         <provider
             android:name=".ui.misc.TinyDocumentsProvider"

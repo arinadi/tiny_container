@@ -38,6 +38,8 @@
     <string name="tc4_container_config_missing">Container config not found</string>
     <string name="tc4_container_missing_boot_cmd">Container "%1$s" missing boot_command config</string>
     <string name="tc4_container_config_lost">Container "%1$s" config lost, please reinstall</string>
+    <string name="tc4_keepalive_notification_channel">Container running</string>
+    <string name="tc4_keepalive_notification_text">Container is running in the background</string>
 
     <!-- Delete dialog -->
     <string name="tc4_dialog_delete_title">Confirm Delete</string>
